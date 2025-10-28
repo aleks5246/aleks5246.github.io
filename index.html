@@ -5,13 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ByteFix - Din digitala lösning</title>
   <style>
-    /* === Grundinställningar === */
+    :root {
+      --primary: #007bff;
+      --dark-primary: #0056d6;
+      --bg-light: #f5f9ff;
+      --text: #222;
+      --card: #fff;
+    }
+
+    body.dark {
+      --primary: #0090ff;
+      --dark-primary: #003b91;
+      --bg-light: #0f172a;
+      --text: #e5e5e5;
+      --card: #1e293b;
+    }
+
     body {
       margin: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f5f9ff;
-      color: #222;
+      background-color: var(--bg-light);
+      color: var(--text);
       scroll-behavior: smooth;
+      transition: background 0.3s, color 0.3s;
     }
 
     .container {
@@ -20,20 +36,21 @@
       margin: auto;
     }
 
-    /* === Header === */
+    /* === HEADER === */
     header {
-      background: linear-gradient(135deg, #0056d6, #007bff);
+      background: linear-gradient(135deg, var(--dark-primary), var(--primary));
       color: white;
-      padding: 20px 0;
+      padding: 15px 0;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 20;
       transition: background 0.4s;
     }
 
     header.scrolled {
-      background: linear-gradient(135deg, #0040a8, #0060e0);
+      background: linear-gradient(135deg, var(--dark-primary), var(--primary));
+      opacity: 0.95;
     }
 
     header .container {
@@ -48,10 +65,14 @@
       letter-spacing: 1px;
     }
 
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
     nav a {
       color: white;
       text-decoration: none;
-      margin-left: 20px;
       font-weight: 500;
       position: relative;
       transition: all 0.3s;
@@ -72,11 +93,46 @@
       width: 100%;
     }
 
-    /* === Hero === */
+    /* === MOBILE MENU === */
+    .menu-btn {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .menu-btn span {
+      width: 25px;
+      height: 3px;
+      background: white;
+      margin: 4px 0;
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+        flex-direction: column;
+        text-align: center;
+        background: var(--dark-primary);
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 100%;
+        padding: 15px 0;
+      }
+      nav.active {
+        display: flex;
+      }
+      .menu-btn {
+        display: flex;
+      }
+    }
+
+    /* === HERO === */
     .hero {
       text-align: center;
       padding: 120px 20px;
-      background: linear-gradient(135deg, #007bff, #00aaff);
+      background: linear-gradient(135deg, var(--primary), #00aaff);
       color: white;
       animation: fadeIn 1.5s ease-in-out;
     }
@@ -94,7 +150,7 @@
 
     .hero a {
       background: white;
-      color: #007bff;
+      color: var(--primary);
       padding: 12px 25px;
       border-radius: 6px;
       font-weight: bold;
@@ -108,7 +164,7 @@
       transform: translateY(-2px);
     }
 
-    /* === Sektioner === */
+    /* === SECTIONS === */
     section {
       padding: 60px 0;
       opacity: 0;
@@ -124,22 +180,10 @@
     h2.section-title {
       text-align: center;
       font-size: 2rem;
-      color: #0056d6;
+      color: var(--dark-primary);
       margin-bottom: 40px;
-      position: relative;
     }
 
-    h2.section-title::after {
-      content: "";
-      display: block;
-      width: 60px;
-      height: 3px;
-      background: #007bff;
-      margin: 10px auto 0;
-      border-radius: 2px;
-    }
-
-    /* === Services === */
     .services {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -148,7 +192,7 @@
     }
 
     .service {
-      background: white;
+      background: var(--card);
       border-radius: 10px;
       padding: 30px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -157,42 +201,90 @@
     }
 
     .service:hover {
-      background: #e8f0ff;
+      background: rgba(0,123,255,0.1);
       transform: translateY(-6px);
       box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
 
     .service h3 {
-      color: #007bff;
+      color: var(--primary);
       margin-bottom: 10px;
     }
 
-    /* === Kontakt === */
-    .contact {
-      text-align: center;
+    /* === FORM === */
+    form {
+      background: var(--card);
+      padding: 30px;
+      max-width: 500px;
+      margin: 0 auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    .contact p {
-      margin-bottom: 10px;
-      font-size: 1.1rem;
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+      background: var(--bg-light);
+      color: var(--text);
+      transition: border 0.2s;
     }
 
-    /* === Footer === */
+    form input:focus, form textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    form button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    form button:hover {
+      background: var(--dark-primary);
+    }
+
+    /* === FOOTER === */
     footer {
-      background: #003a9c;
+      background: var(--dark-primary);
       color: white;
       text-align: center;
       padding: 20px 0;
       font-size: 0.9rem;
     }
 
-    /* === Scroll-to-top knapp === */
+    /* === DARK MODE BUTTON === */
+    #themeToggle {
+      background: white;
+      color: var(--primary);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    #themeToggle:hover {
+      background: #e6f0ff;
+    }
+
+    /* === SCROLL TO TOP === */
     #scrollTopBtn {
       display: none;
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: #007bff;
+      background: var(--primary);
       color: white;
       border: none;
       border-radius: 50%;
@@ -205,7 +297,7 @@
     }
 
     #scrollTopBtn:hover {
-      background: #0056d6;
+      background: var(--dark-primary);
       transform: translateY(-3px);
     }
 
@@ -219,11 +311,16 @@
   <header id="header">
     <div class="container">
       <h1 class="logo">ByteFix</h1>
-      <nav>
+      <nav id="nav">
         <a href="#about">Om oss</a>
         <a href="#services">Tjänster</a>
+        <a href="#form">Felanmälan</a>
         <a href="#contact">Kontakt</a>
       </nav>
+      <div class="menu-btn" id="menu-btn">
+        <span></span><span></span><span></span>
+      </div>
+      <button id="themeToggle">☀️ / 🌙</button>
     </div>
   </header>
 
@@ -237,8 +334,8 @@
     <div class="container">
       <h2 class="section-title">Om ByteFix</h2>
       <p style="text-align:center; max-width:700px; margin:auto;">
-        ByteFix är ett svenskt teknikföretag som brinner för att lösa digitala problem – snabbt, enkelt och pålitligt. 
-        Oavsett om du behöver hjälp med felsökning, webbdesign eller teknisk rådgivning, så har vi lösningen.
+        ByteFix är ett svenskt teknikföretag som löser dina digitala problem – snabbt, enkelt och säkert.
+        Vi erbjuder IT-support, webbutveckling och konsultation för både företag och privatpersoner.
       </p>
     </div>
   </section>
@@ -247,23 +344,23 @@
     <div class="container">
       <h2 class="section-title">Våra Tjänster</h2>
       <div class="services">
-        <div class="service">
-          <h3>💻 IT-support</h3>
-          <p>Få hjälp när tekniken strular – på plats eller på distans.</p>
-        </div>
-        <div class="service">
-          <h3>🌐 Webbutveckling</h3>
-          <p>Modern, säker och snabb webbutveckling för företag och privatpersoner.</p>
-        </div>
-        <div class="service">
-          <h3>📊 Rådgivning</h3>
-          <p>Strategisk IT-rådgivning för företag som vill växa smartare.</p>
-        </div>
-        <div class="service">
-          <h3>🔒 Säkerhet</h3>
-          <p>Vi skyddar din data och dina system med moderna säkerhetslösningar.</p>
-        </div>
+        <div class="service"><h3>💻 IT-support</h3><p>Hjälp med datorer, nätverk och programvara.</p></div>
+        <div class="service"><h3>🌐 Webbutveckling</h3><p>Bygg en modern och säker hemsida med oss.</p></div>
+        <div class="service"><h3>📊 Rådgivning</h3><p>Teknisk rådgivning för företag som vill växa.</p></div>
+        <div class="service"><h3>🔒 Säkerhet</h3><p>Skydda dina system med våra säkerhetslösningar.</p></div>
       </div>
+    </div>
+  </section>
+
+  <section id="form">
+    <div class="container">
+      <h2 class="section-title">Felanmälan</h2>
+      <form>
+        <input type="text" placeholder="Ditt namn" required />
+        <input type="email" placeholder="Din e-postadress" required />
+        <textarea rows="5" placeholder="Beskriv problemet..." required></textarea>
+        <button type="submit">Skicka</button>
+      </form>
     </div>
   </section>
 
@@ -280,32 +377,40 @@
     <p>© 2025 ByteFix. Alla rättigheter förbehållna.</p>
   </footer>
 
-  <button id="scrollTopBtn" title="Till toppen">↑</button>
+  <button id="scrollTopBtn">↑</button>
 
   <script>
-    // Fade-in sektioner vid scroll
+    // Scroll fade-in
     const sections = document.querySelectorAll("section");
-    const options = { threshold: 0.2 };
-    const observer = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add("visible");
       });
-    }, options);
+    }, { threshold: 0.2 });
     sections.forEach(sec => observer.observe(sec));
 
-    // Header scroll-färg
+    // Header scroll
     const header = document.getElementById("header");
     window.addEventListener("scroll", () => {
-      if (window.scrollY > 60) header.classList.add("scrolled");
-      else header.classList.remove("scrolled");
+      header.classList.toggle("scrolled", window.scrollY > 60);
+      scrollTopBtn.style.display = (window.scrollY > 400) ? "block" : "none";
     });
 
-    // Scroll-to-top knapp
-    const topBtn = document.getElementById("scrollTopBtn");
-    window.onscroll = () => {
-      topBtn.style.display = (document.documentElement.scrollTop > 300) ? "block" : "none";
+    // Scroll-to-top
+    const scrollTopBtn = document.getElementById("scrollTopBtn");
+    scrollTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+    // Dark mode
+    const themeToggle = document.getElementById("themeToggle");
+    themeToggle.onclick = () => {
+      document.body.classList.toggle("dark");
+      themeToggle.textContent = document.body.classList.contains("dark") ? "🌙 Mörkt" : "☀️ Ljust";
     };
-    topBtn.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+    // Mobilmeny
+    const menuBtn = document.getElementById("menu-btn");
+    const nav = document.getElementById("nav");
+    menuBtn.onclick = () => nav.classList.toggle("active");
   </script>
 </body>
 </html>
