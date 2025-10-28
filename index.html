@@ -5,24 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ByteFix - Din digitala lösning</title>
   <style>
+    /* === Grundinställningar === */
     body {
       margin: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f5f9ff;
       color: #222;
-    }
-
-    header {
-      background: linear-gradient(135deg, #0056d6, #007bff);
-      color: white;
-      padding: 20px 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      scroll-behavior: smooth;
     }
 
     .container {
       width: 90%;
       max-width: 1100px;
       margin: auto;
+    }
+
+    /* === Header === */
+    header {
+      background: linear-gradient(135deg, #0056d6, #007bff);
+      color: white;
+      padding: 20px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      transition: background 0.4s;
+    }
+
+    header.scrolled {
+      background: linear-gradient(135deg, #0040a8, #0060e0);
     }
 
     header .container {
@@ -42,23 +53,38 @@
       text-decoration: none;
       margin-left: 20px;
       font-weight: 500;
-      transition: opacity 0.3s;
+      position: relative;
+      transition: all 0.3s;
     }
 
-    nav a:hover {
-      opacity: 0.8;
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 0%;
+      height: 2px;
+      background: white;
+      transition: width 0.3s;
     }
 
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    /* === Hero === */
     .hero {
       text-align: center;
-      padding: 100px 20px;
+      padding: 120px 20px;
       background: linear-gradient(135deg, #007bff, #00aaff);
       color: white;
+      animation: fadeIn 1.5s ease-in-out;
     }
 
     .hero h2 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
+      font-size: 2.8rem;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
     }
 
     .hero p {
@@ -73,28 +99,51 @@
       border-radius: 6px;
       font-weight: bold;
       text-decoration: none;
-      transition: background 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: all 0.3s;
     }
 
     .hero a:hover {
       background: #e6f0ff;
+      transform: translateY(-2px);
     }
 
+    /* === Sektioner === */
     section {
       padding: 60px 0;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s ease-out;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     h2.section-title {
       text-align: center;
       font-size: 2rem;
       color: #0056d6;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
+      position: relative;
     }
 
+    h2.section-title::after {
+      content: "";
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: #007bff;
+      margin: 10px auto 0;
+      border-radius: 2px;
+    }
+
+    /* === Services === */
     .services {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+      gap: 25px;
       text-align: center;
     }
 
@@ -102,12 +151,15 @@
       background: white;
       border-radius: 10px;
       padding: 30px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+      cursor: pointer;
     }
 
     .service:hover {
-      transform: translateY(-5px);
+      background: #e8f0ff;
+      transform: translateY(-6px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
 
     .service h3 {
@@ -115,14 +167,17 @@
       margin-bottom: 10px;
     }
 
+    /* === Kontakt === */
     .contact {
       text-align: center;
     }
 
     .contact p {
       margin-bottom: 10px;
+      font-size: 1.1rem;
     }
 
+    /* === Footer === */
     footer {
       background: #003a9c;
       color: white;
@@ -131,15 +186,37 @@
       font-size: 0.9rem;
     }
 
-    @media (max-width: 600px) {
-      .hero h2 {
-        font-size: 2rem;
-      }
+    /* === Scroll-to-top knapp === */
+    #scrollTopBtn {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    #scrollTopBtn:hover {
+      background: #0056d6;
+      transform: translateY(-3px);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <header>
+  <header id="header">
     <div class="container">
       <h1 class="logo">ByteFix</h1>
       <nav>
@@ -152,7 +229,7 @@
 
   <section class="hero">
     <h2>Välkommen till ByteFix</h2>
-    <p>Vi erbjuder smarta digitala lösningar för företag och privatpersoner.</p>
+    <p>Smart teknik. Trygg support. Modern design.</p>
     <a href="#services">Utforska våra tjänster</a>
   </section>
 
@@ -160,8 +237,8 @@
     <div class="container">
       <h2 class="section-title">Om ByteFix</h2>
       <p style="text-align:center; max-width:700px; margin:auto;">
-        ByteFix grundades med visionen att göra teknik tillgänglig, trygg och effektiv. 
-        Vi arbetar med allt från felsökning och support till webbutveckling och IT-rådgivning.
+        ByteFix är ett svenskt teknikföretag som brinner för att lösa digitala problem – snabbt, enkelt och pålitligt. 
+        Oavsett om du behöver hjälp med felsökning, webbdesign eller teknisk rådgivning, så har vi lösningen.
       </p>
     </div>
   </section>
@@ -171,16 +248,20 @@
       <h2 class="section-title">Våra Tjänster</h2>
       <div class="services">
         <div class="service">
-          <h3>IT-support</h3>
-          <p>Snabb och pålitlig hjälp när tekniken strular – på plats eller fjärrstyrt.</p>
+          <h3>💻 IT-support</h3>
+          <p>Få hjälp när tekniken strular – på plats eller på distans.</p>
         </div>
         <div class="service">
-          <h3>Webbutveckling</h3>
-          <p>Vi skapar moderna, responsiva och säkra hemsidor för ditt företag.</p>
+          <h3>🌐 Webbutveckling</h3>
+          <p>Modern, säker och snabb webbutveckling för företag och privatpersoner.</p>
         </div>
         <div class="service">
-          <h3>Rådgivning</h3>
-          <p>Personlig rådgivning för företag som vill växa med teknikens hjälp.</p>
+          <h3>📊 Rådgivning</h3>
+          <p>Strategisk IT-rådgivning för företag som vill växa smartare.</p>
+        </div>
+        <div class="service">
+          <h3>🔒 Säkerhet</h3>
+          <p>Vi skyddar din data och dina system med moderna säkerhetslösningar.</p>
         </div>
       </div>
     </div>
@@ -198,6 +279,33 @@
   <footer>
     <p>© 2025 ByteFix. Alla rättigheter förbehållna.</p>
   </footer>
+
+  <button id="scrollTopBtn" title="Till toppen">↑</button>
+
+  <script>
+    // Fade-in sektioner vid scroll
+    const sections = document.querySelectorAll("section");
+    const options = { threshold: 0.2 };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("visible");
+      });
+    }, options);
+    sections.forEach(sec => observer.observe(sec));
+
+    // Header scroll-färg
+    const header = document.getElementById("header");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 60) header.classList.add("scrolled");
+      else header.classList.remove("scrolled");
+    });
+
+    // Scroll-to-top knapp
+    const topBtn = document.getElementById("scrollTopBtn");
+    window.onscroll = () => {
+      topBtn.style.display = (document.documentElement.scrollTop > 300) ? "block" : "none";
+    };
+    topBtn.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  </script>
 </body>
 </html>
-
